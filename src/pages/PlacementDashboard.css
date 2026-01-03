@@ -1,0 +1,124 @@
+.placement-dashboard {
+  padding: 2rem;
+  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #6c63ff, #a86efc);
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(108,99,255,0.2);
+}
+
+.primary {
+  background: #fff;
+  color: #6c63ff;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.summary-card {
+  background: #fff;
+  padding: 1.2rem;
+  border-radius: 14px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.summary-card .icon {
+  width: 44px;
+  height: 44px;
+  background: #f1e7ff;
+  color: #6c63ff;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+}
+
+.summary-card h3 { margin: 0; font-size: 1.6rem; }
+.summary-card p { margin: 0.2rem 0 0; color: #4a5568; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ghost {
+  background: #fff;
+  border: 2px solid #6c63ff;
+  color: #6c63ff;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.row h4 { margin: 0; }
+.row p { margin: 0.2rem 0 0; color: #4a5568; }
+
+.meta { text-align: right; }
+.status {
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.status.ongoing { background: #e6f9f0; color: #0ea05d; }
+.status.registration { background: #e6edff; color: #5263ff; }
+.status.upcoming { background: #fff7e6; color: #d97706; }
+
+.badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.badge.success { background: #e6f9f0; color: #0ea05d; }
+.badge.warning { background: #fff7e6; color: #d97706; }
