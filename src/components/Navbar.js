@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaSignOutAlt, FaCog, FaChartBar, FaMicrophone, FaBook, FaUpload, FaBuilding } from 'react-icons/fa';
+import { getProfile } from '../api';
 import './Navbar.css';
 
 const Navbar = ({ userRole }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let active = true;
+    const loadUser = async () => {
+      try {
+        const data = await getProfile();
+        if (active) setUserInfo({ name: data.name, email: data.email });
+      } catch (err) {
+        console.error('Failed to load user info', err);
+      }
+    };
+
+    loadUser();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
@@ -16,8 +35,8 @@ const Navbar = ({ userRole }) => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <div className="logo-icon">⭐</div>
-          <span>RekrootDesk</span>
+          <div className="logo-icon">🚀</div>
+          <span>Placement Portal</span>
         </Link>
         
         <div className="navbar-menu">
@@ -34,13 +53,13 @@ const Navbar = ({ userRole }) => {
             className="user-avatar" 
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <span>N</span>
+            <span>{(userInfo?.name || 'N')[0].toUpperCase()}</span>
           </div>
           {showDropdown && (
             <div className="user-dropdown">
               <div className="dropdown-header">
-                <p className="user-name">Nandhinieswarakumar</p>
-                <p className="user-email">nandhinieswarakumar@gmail.com</p>
+                <p className="user-name">{userInfo?.name || 'User'}</p>
+                <p className="user-email">{userInfo?.email || 'your.email@example.com'}</p>
               </div>
               <Link to={`/${userRole}-dashboard`} className="dropdown-item">
                 <FaChartBar /> Dashboard

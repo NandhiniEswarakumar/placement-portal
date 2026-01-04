@@ -18,10 +18,42 @@ router.get('/me', authMiddleware, async (req, res) => {
 });
 
 router.put('/me', authMiddleware, async (req, res) => {
-  const { jobTitle, location, bio, linkedin, website } = req.body;
+  const {
+    jobTitle,
+    location,
+    bio,
+    linkedin,
+    website,
+    github,
+    portfolio,
+    phone,
+    degree,
+    graduationYear,
+    cgpa,
+    resumeUrl,
+    languages = [],
+    projects = []
+  } = req.body;
+
   await User.findByIdAndUpdate(req.user.id, {
-    profile: { jobTitle: jobTitle || '', location: location || '', bio: bio || '', linkedin: linkedin || '', website: website || '' }
+    profile: {
+      jobTitle: jobTitle || '',
+      location: location || '',
+      bio: bio || '',
+      linkedin: linkedin || '',
+      website: website || '',
+      github: github || '',
+      portfolio: portfolio || '',
+      phone: phone || '',
+      degree: degree || '',
+      graduationYear: graduationYear || '',
+      cgpa: cgpa || '',
+      resumeUrl: resumeUrl || '',
+      languages: languages.map((l) => ({ name: l.name || '', proficiency: l.proficiency || '' })),
+      projects: projects.map((p) => ({ title: p.title || '', description: p.description || '', link: p.link || '' }))
+    }
   });
+
   res.json({ ok: true });
 });
 

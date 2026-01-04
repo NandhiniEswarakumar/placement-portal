@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { login } from '../api.js';
 import './Auth.css';
 
 const Login = ({ setUserRole }) => {
@@ -8,13 +9,24 @@ const Login = ({ setUserRole }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('student');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem('userRole', role);
-    setUserRole(role);
-    navigate(`/${role}-dashboard`);
+    setError('');
+    setLoading(true);
+    try {
+      await login(email, password);
+      localStorage.setItem('userRole', role);
+      setUserRole(role);
+      navigate(`/${role}-dashboard`);
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,7 +40,7 @@ const Login = ({ setUserRole }) => {
       <div className="auth-content">
         <div className="auth-left">
           <h1>Welcome Back to</h1>
-          <h2>RekrootDesk</h2>
+          <h2>Campus Placement Portal</h2>
           <p>AI-Powered Career Platform</p>
           <div className="features-list">
             <div className="feature-item">
@@ -58,6 +70,7 @@ const Login = ({ setUserRole }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
+              {error && <div className="error-message" style={{color: 'red', marginBottom: '15px', padding: '10px', backgroundColor: '#fee', borderRadius: '4px'}}>{error}</div>}
               <div className="form-group">
                 <label>Select Role</label>
                 <select 
@@ -116,8 +129,8 @@ const Login = ({ setUserRole }) => {
                 </Link>
               </div>
 
-              <button type="submit" className="auth-button">
-                Sign In
+              <button type="submit" className="auth-button" disabled={loading}>
+                {loading ? 'Signing In...' : 'Sign In'}
               </button>
 
               <div className="auth-footer">

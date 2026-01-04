@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaPhone } from 'react-icons/fa';
+import { signup } from '../api.js';
 import './Auth.css';
 
 const Signup = () => {
@@ -13,6 +14,8 @@ const Signup = () => {
     role: 'student'
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,13 +25,29 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
-    navigate('/login');
+
+    setLoading(true);
+    try {
+      await signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role
+      });
+      navigate('/login');
+    } catch (err) {
+      setError(err.message || 'Signup failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,7 +61,7 @@ const Signup = () => {
       <div className="auth-content">
         <div className="auth-left">
           <h1>Join</h1>
-          <h2>RekrootDesk</h2>
+          <h2>Campus Placement Portal</h2>
           <p>Start Your Career Journey Today</p>
           <div className="stats-container">
             <div className="stat-box">
@@ -68,6 +87,7 @@ const Signup = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
+              {error && <div className="error-message" style={{color: 'red', marginBottom: '15px', padding: '10px', backgroundColor: '#fee', borderRadius: '4px'}}>{error}</div>}
               <div className="form-group">
                 <label>Select Role</label>
                 <select 
@@ -171,8 +191,8 @@ const Signup = () => {
                 </label>
               </div>
 
-              <button type="submit" className="auth-button">
-                Create Account
+              <button type="submit" className="auth-button" disabled={loading}>
+                {loading ? 'Creating Account...' : 'Create Account'}
               </button>
 
               <div className="auth-footer">

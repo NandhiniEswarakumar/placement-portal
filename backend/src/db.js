@@ -11,7 +11,16 @@ const userSchema = new mongoose.Schema({
     location: String,
     bio: String,
     linkedin: String,
-    website: String
+    website: String,
+    github: String,
+    portfolio: String,
+    phone: String,
+    degree: String,
+    graduationYear: String,
+    cgpa: String,
+    resumeUrl: String,
+    languages: [{ name: String, proficiency: String }],
+    projects: [{ title: String, description: String, link: String }]
   },
   skills: [{
     name: String,

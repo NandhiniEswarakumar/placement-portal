@@ -5,7 +5,7 @@
 
 .hero {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 2rem;
   padding: 3rem 2rem;
   align-items: center;
@@ -82,58 +82,7 @@
 }
 
 .hero-visual {
-  display: flex;
-  justify-content: center;
-}
-
-.card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 1.5rem;
-  width: 360px;
-  box-shadow: 0 20px 60px rgba(108, 99, 255, 0.15);
-}
-
-.card-header, .card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.card-body h4 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.metric {
-  margin: 0.8rem 0;
-}
-
-.metric-label {
-  font-size: 0.9rem;
-  color: #4a5568;
-}
-
-.metric-bar {
-  width: 100%;
-  background: #edf2f7;
-  border-radius: 999px;
-  height: 10px;
-  overflow: hidden;
-}
-
-.metric-bar div {
-  height: 100%;
-  background: linear-gradient(135deg, #6c63ff, #a86efc);
-  border-radius: 999px;
-}
-
-.pill {
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.85rem;
+  display: none;
 }
 
 .pill.success { background: #e7f9f2; color: #0ea05d; }

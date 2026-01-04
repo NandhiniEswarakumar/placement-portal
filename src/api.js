@@ -1,7 +1,7 @@
 // Simple API client for the React app
 // Configure backend URL via REACT_APP_API_URL or defaults to localhost
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 function getToken() {
 	return localStorage.getItem('token');
@@ -53,8 +53,8 @@ export function getProfile() {
 	return apiFetch('/profile/me');
 }
 
-export function updateProfile({ jobTitle, location, bio, linkedin, website }) {
-	return apiFetch('/profile/me', { method: 'PUT', body: { jobTitle, location, bio, linkedin, website } });
+export function updateProfile(body) {
+	return apiFetch('/profile/me', { method: 'PUT', body });
 }
 
 // Skills
@@ -68,6 +68,10 @@ export function addSkill({ name, category = 'Technical', proficiency = 50 }) {
 
 export function deleteSkill(id) {
 	return apiFetch(`/skills/${id}`, { method: 'DELETE' });
+}
+
+export function updateSkill(id, { name, category = 'Technical', proficiency = 50 }) {
+	return apiFetch(`/skills/${id}`, { method: 'PUT', body: { name, category, proficiency } });
 }
 
 export { API_BASE_URL, apiFetch, getToken, setToken };

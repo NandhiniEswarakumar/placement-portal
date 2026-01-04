@@ -1,12 +1,12 @@
 import express from 'express';
 import { User } from '../db.js';
 import { PlacementDrive } from '../models/placementDrive.js';
-import { authenticate } from '../middleware/auth.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Get placement stats
-router.get('/stats', authenticate, async (req, res) => {
+router.get('/stats', authMiddleware, async (req, res) => {
   try {
     const activeDrives = await PlacementDrive.countDocuments({ status: 'upcoming' });
     const registeredStudents = await User.countDocuments({ role: 'student' });
@@ -27,7 +27,7 @@ router.get('/stats', authenticate, async (req, res) => {
 });
 
 // Get upcoming drives
-router.get('/drives', authenticate, async (req, res) => {
+router.get('/drives', authMiddleware, async (req, res) => {
   try {
     const drives = await PlacementDrive.find({ status: 'upcoming' })
       .populate('registeredStudents', 'email name')
@@ -39,7 +39,7 @@ router.get('/drives', authenticate, async (req, res) => {
 });
 
 // Register student for a drive
-router.post('/drives/:driveId/register', authenticate, async (req, res) => {
+router.post('/drives/:driveId/register', authMiddleware, async (req, res) => {
   try {
     const { driveId } = req.params;
     const userId = req.user.id;
