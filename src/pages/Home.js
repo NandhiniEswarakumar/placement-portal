@@ -37,10 +37,10 @@ const Home = () => {
     <div className="home-page">
       <section className="hero">
         <div className="hero-content">
-          <div className="badge">AI-Powered Career Platform</div>
+          <div className="badge">Career Platform</div>
           <h1>Find Your Perfect <span>Match</span> in the Job Market</h1>
           <p>
-            RekrootDesk AI connects talent with opportunity through smart matching,
+            RekrootDesk connects talent with opportunity through smart matching,
             skill analysis, and personalized recommendations.
           </p>
           <div className="hero-actions">
@@ -57,38 +57,7 @@ const Home = () => {
           </div>
         </div>
         <div className="hero-visual">
-          <div className="card glass">
-            <div className="card-header">
-              <div className="pill success">Instant Match</div>
-              <span>3 new opportunities</span>
-            </div>
-            <div className="card-body">
-              <h4>AI Job Matching</h4>
-              <p>Finding your perfect role</p>
-              <div className="metric">
-                <div className="metric-label">Technical Skills</div>
-                <div className="metric-bar">
-                  <div style={{ width: '95%' }}></div>
-                </div>
-              </div>
-              <div className="metric">
-                <div className="metric-label">Experience Match</div>
-                <div className="metric-bar">
-                  <div style={{ width: '88%' }}></div>
-                </div>
-              </div>
-              <div className="metric">
-                <div className="metric-label">Culture Fit</div>
-                <div className="metric-bar">
-                  <div style={{ width: '92%' }}></div>
-                </div>
-              </div>
-            </div>
-            <div className="card-footer">
-              <div className="pill neutral">2.5K+ hired this week</div>
-              <div className="avatars">ABC</div>
-            </div>
-          </div>
+          {/* Visual summary removed by request */}
         </div>
       </section>
 
@@ -117,7 +86,7 @@ const Home = () => {
           <div className="portal-card">
             <div className="pill success">HR</div>
             <h3>HR Dashboard</h3>
-            <p>View hiring companies, required skills, candidate pipeline, AI screening, and offer management.</p>
+            <p>View hiring companies, required skills, candidate pipeline, automated screening, and offer management.</p>
             <Link to="/hr-dashboard" className="link-btn">Open HR Portal</Link>
           </div>
           <div className="portal-card">
@@ -132,7 +101,7 @@ const Home = () => {
       <section className="cta">
         <div className="cta-content">
           <div>
-            <h2>Launch Your Career with AI Guidance</h2>
+            <h2>Launch Your Career with Expert Guidance</h2>
             <p>Resume optimization, interview coaching, and a personal chatbot to keep you ready.</p>
           </div>
           <div className="cta-actions">

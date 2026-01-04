@@ -12,120 +12,82 @@ const Login = ({ setUserRole }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // ✅ STORE USER DATA
+    const userData = {
+      name: email.split('@')[0],
+      email,
+      role,
+      isLoggedIn: true
+    };
+
+    localStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('userRole', role);
+
+    // ✅ ONLY THIS STATE EXISTS
     setUserRole(role);
+
+    // notify other components (e.g., Navbar) to re-read user data
+    window.dispatchEvent(new Event('userChanged'));
+
     navigate(`/${role}-dashboard`);
   };
 
   return (
     <div className="auth-container">
-      <div className="auth-background">
-        <div className="gradient-circle circle-1"></div>
-        <div className="gradient-circle circle-2"></div>
-        <div className="gradient-circle circle-3"></div>
-      </div>
+      <div className="auth-card">
+        <h2>Sign In</h2>
 
-      <div className="auth-content">
-        <div className="auth-left">
-          <h1>Welcome Back to</h1>
-          <h2>RekrootDesk</h2>
-          <p>AI-Powered Career Platform</p>
-          <div className="features-list">
-            <div className="feature-item">
-              <span className="feature-icon">✓</span>
-              <span>Smart Job Matching</span>
-            </div>
-            <div className="feature-item">
-              <span className="feature-icon">✓</span>
-              <span>AI Resume Builder</span>
-            </div>
-            <div className="feature-item">
-              <span className="feature-icon">✓</span>
-              <span>Interview Preparation</span>
-            </div>
-            <div className="feature-item">
-              <span className="feature-icon">✓</span>
-              <span>Skill Assessment</span>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Role</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="student">Student</option>
+              <option value="hr">HR</option>
+              <option value="placement">Placement</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <div className="input-group">
+              <FaEnvelope />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
           </div>
-        </div>
 
-        <div className="auth-right">
-          <div className="auth-card">
-            <div className="auth-header">
-              <h2>Sign In</h2>
-              <p>Enter your credentials to access your account</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="auth-form">
-              <div className="form-group">
-                <label>Select Role</label>
-                <select 
-                  value={role} 
-                  onChange={(e) => setRole(e.target.value)}
-                  className="form-select"
-                >
-                  <option value="student">Student</option>
-                  <option value="hr">HR Manager</option>
-                  <option value="placement">Placement Coordinator</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Email Address</label>
-                <div className="input-group">
-                  <FaEnvelope className="input-icon" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your.email@example.com"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Password</label>
-                <div className="input-group">
-                  <FaLock className="input-icon" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="toggle-password"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-options">
-                <label className="checkbox-label">
-                  <input type="checkbox" />
-                  <span>Remember me</span>
-                </label>
-                <Link to="/reset-password" className="forgot-link">
-                  Forgot Password?
-                </Link>
-              </div>
-
-              <button type="submit" className="auth-button">
-                Sign In
+          <div className="form-group">
+            <label>Password</label>
+            <div className="input-group">
+              <FaLock />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
-
-              <div className="auth-footer">
-                <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+
+          <button type="submit" className="auth-button">
+            Sign In
+          </button>
+
+          <p className="auth-footer">
+            Don’t have an account? <Link to="/signup">Sign Up</Link>
+          </p>
+        </form>
       </div>
     </div>
   );

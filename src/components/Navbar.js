@@ -1,84 +1,111 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaSignOutAlt, FaCog, FaChartBar, FaMicrophone, FaBook, FaUpload, FaBuilding } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = ({ userRole }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Read user once on mount
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+  }, []);
+
+  // Also re-read when role changes (keeps previous behavior)
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+  }, [userRole]);
+
+  // Listen for explicit user updates from other components (login/logout)
+  useEffect(() => {
+    const handleUserChanged = () => {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      setUser(storedUser);
+    };
+    // for same-window updates
+    window.addEventListener('userChanged', handleUserChanged);
+    // for cross-tab updates
+    window.addEventListener('storage', handleUserChanged);
+    return () => {
+      window.removeEventListener('userChanged', handleUserChanged);
+      window.removeEventListener('storage', handleUserChanged);
+    };
+  }, []);
+
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const handleLogout = () => {
-    localStorage.removeItem('userRole');
+    localStorage.clear();
+    setUser(null);
+    // notify other components
+    window.dispatchEvent(new Event('userChanged'));
+    setShowDropdown(false);
     navigate('/login');
+  };
+
+  const getInitials = (name) => {
+    if (!name) return '';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <div className="logo-icon">⭐</div>
-          <span>RekrootDesk</span>
+          <span className="logo-icon">🚀</span>
+          Placement Portal
         </Link>
-        
+
         <div className="navbar-menu">
           <Link to="/" className="navbar-link">Home</Link>
           <Link to="/jobs" className="navbar-link">Jobs</Link>
-          {userRole === 'student' && <Link to="/student-dashboard" className="navbar-link">Dashboard</Link>}
-          {userRole === 'hr' && <Link to="/hr-dashboard" className="navbar-link">HR Portal</Link>}
-          {userRole === 'placement' && <Link to="/placement-dashboard" className="navbar-link">Dashboard</Link>}
-          <Link to="/profile" className="navbar-link">Profile</Link>
+
+          {userRole === 'student' && (
+            <Link to="/student-dashboard" className="navbar-link">Dashboard</Link>
+          )}
+          {userRole === 'hr' && (
+            <Link to="/hr-dashboard" className="navbar-link">HR</Link>
+          )}
+          {userRole === 'placement' && (
+            <Link to="/placement-dashboard" className="navbar-link">Placement</Link>
+          )}
         </div>
 
         <div className="navbar-user">
-          <div 
-            className="user-avatar" 
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <span>N</span>
-          </div>
-          {showDropdown && (
-            <div className="user-dropdown">
-              <div className="dropdown-header">
-                <p className="user-name">Nandhinieswarakumar</p>
-                <p className="user-email">nandhinieswarakumar@gmail.com</p>
+          {!user && <div style={{ color: 'white', fontWeight: 600 }}>Guest User</div>}
+
+          {user && (
+            <>
+              <div
+                className="user-avatar"
+                onClick={() => setShowDropdown((s) => !s)}
+                title={user.name || user.email}
+              >
+                {getInitials(user.name || (user.email || ''))}
               </div>
-              <Link to={`/${userRole}-dashboard`} className="dropdown-item">
-                <FaChartBar /> Dashboard
-              </Link>
-              <Link to="/profile" className="dropdown-item">
-                <FaUser /> Profile
-              </Link>
-              <Link to="/settings" className="dropdown-item">
-                <FaCog /> Settings
-              </Link>
-              <div className="dropdown-divider"></div>
-              <div className="dropdown-section">
-                <p className="dropdown-section-title">Student Tools</p>
-                <Link to="/student-dashboard?tab=interview" className="dropdown-item">
-                  <FaMicrophone /> Interview Prep
-                </Link>
-                <Link to="/student-dashboard?tab=training" className="dropdown-item">
-                  <FaBook /> Skill Assessment
-                </Link>
-                <Link to="/student-dashboard?tab=resume" className="dropdown-item">
-                  <FaUpload /> Resume Builder
-                </Link>
-              </div>
-              <div className="dropdown-divider"></div>
-              <div className="dropdown-section">
-                <p className="dropdown-section-title">Portals</p>
-                <Link to="/hr-dashboard" className="dropdown-item">
-                  <FaBuilding /> HR Portal
-                </Link>
-                <Link to="/placement-dashboard" className="dropdown-item">
-                  <FaBuilding /> Placement Portal
-                </Link>
-              </div>
-              <div className="dropdown-divider"></div>
-              <button onClick={handleLogout} className="dropdown-item logout">
-                <FaSignOutAlt /> Sign out
-              </button>
-            </div>
+
+              {showDropdown && (
+                <div className="user-dropdown">
+                  <div className="dropdown-header">
+                    <p className="user-name">{user.name || (user.email && user.email.split('@')[0])}</p>
+                    <p className="user-email">{user.email}</p>
+                  </div>
+                  <div className="dropdown-section">
+                    <button className="dropdown-item" onClick={() => { setShowDropdown(false); navigate(`/users/${encodeURIComponent(user.email)}`); }}>
+                      View Profile
+                    </button>
+                    <div className="dropdown-divider" />
+                    <button className="dropdown-item logout" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
