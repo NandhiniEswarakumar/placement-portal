@@ -6,7 +6,6 @@ import './HRDashboard.css';
 const HRDashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
@@ -30,11 +29,9 @@ const HRDashboard = () => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      setError(null);
       const data = await getJobs();
       setJobs(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch jobs');
       console.error('Failed to fetch jobs:', err);
     } finally {
       setLoading(false);
@@ -134,13 +131,6 @@ const HRDashboard = () => {
           <FaPlus /> Post New Job
         </button>
       </div>
-
-      {error && (
-        <div className="error-banner">
-          <span>{error}</span>
-          <button className="close-error-btn" onClick={() => setError(null)}>✕</button>
-        </div>
-      )}
 
       {loading ? (
         <div className="loading"><FaSpinner className="spin" /> Loading...</div>

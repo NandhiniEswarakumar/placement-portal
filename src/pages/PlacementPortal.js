@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaBriefcase, FaUsers, FaBuilding, FaChartBar, FaCalendarAlt, FaCog, FaChartLine } from 'react-icons/fa';
+import { FaBriefcase, FaUsers, FaBuilding, FaChartBar, FaChartLine } from 'react-icons/fa';
 import './PlacementPortal.css';
 
 const PlacementPortal = () => {
@@ -10,7 +10,7 @@ const PlacementPortal = () => {
     placementsYTD: 0
   });
 
-  const [upcomingDrives, setUpcomingDrives] = useState([
+  const [upcomingDrives] = useState([
     {
       id: 1,
       company: 'Google',

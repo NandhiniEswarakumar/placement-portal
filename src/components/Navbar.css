@@ -1,10 +1,13 @@
 .navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--card);
   padding: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  animation: slideInFromTop 0.5s ease-out;
 }
 
 .navbar-container {
@@ -20,34 +23,62 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: white;
+  color: var(--primary);
   font-size: 1.5rem;
   font-weight: 700;
   gap: 0.5rem;
+  transition: all 0.3s ease;
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
 }
 
 .logo-icon {
-  font-size: 1.8rem;
+  width: 125px;
+  height: 125px;
+  object-fit: contain;
+  animation: bounce 1s ease-in-out infinite;
 }
 
 .navbar-menu {
   display: flex;
   gap: 2rem;
   align-items: center;
+  animation: fadeInRight 0.6s ease-out;
 }
 
 .navbar-link {
-  color: white;
+  color: var(--text);
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 0.3s ease;
 }
 
 .navbar-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  color: var(--primary);
+  background: rgba(255, 111, 97, 0.08);
+  transform: translateY(-1px);
+}
+
+.navbar-link:hover::before {
+  width: 100%;
 }
 
 .navbar-user {
@@ -58,31 +89,35 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: 3px solid white;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border: 2px solid var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow);
+  animation: scaleIn 0.6s ease-out;
 }
 
 .user-avatar:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
 }
 
 .user-dropdown {
   position: absolute;
   top: 60px;
   right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  min-width: 250px;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  min-width: 280px;
   overflow: hidden;
-  animation: slideDown 0.3s ease;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
 }
 
 @keyframes slideDown {
@@ -98,7 +133,7 @@
 
 .dropdown-header {
   padding: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary);
   color: white;
 }
 
@@ -119,7 +154,7 @@
   gap: 0.6rem;
   padding: 0.7rem 1.2rem;
   text-decoration: none;
-  color: #333;
+  color: var(--text);
   transition: background 0.2s;
   border: none;
   background: none;
@@ -130,23 +165,24 @@
 }
 
 .dropdown-item:hover {
-  background: #f5f5f5;
+  background: var(--pill);
+  color: var(--primary);
 }
 
 .dropdown-item.logout {
-  color: #e74c3c;
+  color: var(--danger);
 }
 
 .dropdown-divider {
   height: 1px;
-  background: #e0e0e0;
+  background: var(--border);
   margin: 0.3rem 0;
 }
 
 .dropdown-section-title {
   margin: 0.4rem 1.2rem 0.25rem;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--text-light);
   font-weight: 700;
 }
 
@@ -158,4 +194,18 @@
   .navbar-menu {
     display: none;
   }
+  
+  .navbar-container {
+    padding: 1rem;
+  }
+  
+  .navbar-logo {
+    font-size: 1.3rem;
+  }
+  
+  .user-dropdown {
+    min-width: 260px;
+    right: -10px;
+  }
 }
+

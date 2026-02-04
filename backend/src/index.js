@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
 import skillRoutes from './routes/skills.js';
 import placementRoutes from './routes/placement.js';
+import jobRoutes from './routes/jobs.js';
+import testimonialRoutes from './routes/testimonials.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +22,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/placement', placementRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 async function start() {
   await initDb();

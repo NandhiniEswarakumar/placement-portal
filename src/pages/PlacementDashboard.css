@@ -1,6 +1,7 @@
 .placement-dashboard {
   padding: 2rem;
   background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .header {
@@ -12,6 +13,7 @@
   padding: 1.5rem;
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(108,99,255,0.2);
+  animation: slideInFromTop 0.6s ease-out;
 }
 
 .primary {
@@ -22,6 +24,12 @@
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary:hover {
+  animation: pulse 0.6s ease-out;
+  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
 }
 
 .summary-grid {
@@ -29,6 +37,7 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   margin: 1.5rem 0;
+  animation: fadeInUp 0.7s ease-out 0.2s both;
 }
 
 .summary-card {
@@ -39,6 +48,16 @@
   gap: 1rem;
   align-items: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  animation: scaleIn 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.summary-card:nth-child(2) { animation-delay: 0.1s; }
+.summary-card:nth-child(3) { animation-delay: 0.2s; }
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
 }
 
 .summary-card .icon {
@@ -122,3 +141,4 @@
 
 .badge.success { background: #e6f9f0; color: #0ea05d; }
 .badge.warning { background: #fff7e6; color: #d97706; }
+

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaEnvelope, FaCalendarAlt, FaCamera, FaPen, FaEdit, FaTrash, FaGithub, FaGlobe, FaPhone, FaGraduationCap, FaFileUpload, FaLanguage, FaProjectDiagram } from 'react-icons/fa';
+import { FaEnvelope, FaCalendarAlt, FaCamera, FaPen, FaEdit, FaTrash, FaGithub, FaGlobe, FaPhone, FaGraduationCap, FaFileUpload, FaLanguage, FaProjectDiagram, FaUser, FaBriefcase, FaAward, FaSave, FaPlus, FaLinkedin, FaMapMarkerAlt } from 'react-icons/fa';
 import { getProfile, updateProfile, getSkills, addSkill, deleteSkill, updateSkill } from '../api';
 import './Profile.css';
 
@@ -12,6 +12,7 @@ const Profile = () => {
   const [editingSkillIndex, setEditingSkillIndex] = useState(null);
   const [editingProjectIndex, setEditingProjectIndex] = useState(null);
   const [editingLanguageIndex, setEditingLanguageIndex] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     jobTitle: '',
     location: '',
@@ -103,6 +104,17 @@ const Profile = () => {
   const handleSkillChange = (e) => {
     const { name, value } = e.target;
     setSkillForm((prev) => ({ ...prev, [name]: name === 'proficiency' ? Number(value) : value }));
+  };
+
+  const openProfileModal = (targetId) => {
+    setShowModal(true);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.focus({ preventScroll: false });
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   };
 
   const handleSkillSubmit = async (e) => {
@@ -226,494 +238,438 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <div className="profile-banner">
-        <div className="avatar-wrap">
-          <div className="avatar">{(profile?.name || 'N')[0].toUpperCase()}</div>
-          <button className="avatar-edit" aria-label="Upload avatar">
-            <FaCamera />
-          </button>
-        </div>
-        <div>
-          <h1>{profile?.name || 'Your Name'}</h1>
-          <p className="subtitle">{form.jobTitle || 'Add your job title'}</p>
-          <div className="meta-row">
-            <span><FaEnvelope /> {profile?.email || 'your.email@example.com'}</span>
-            <span>
-              <FaCalendarAlt />{' '}
-              {profile?.joinedAt
-                ? `Joined ${new Date(profile.joinedAt).toLocaleString('default', { month: 'long', year: 'numeric' })}`
-                : 'Recently joined'}
-            </span>
-          </div>
-        </div>
-        <button className="edit-btn" onClick={() => setShowModal(true)}>
-          <FaPen /> Edit Profile
+      <div className="profile-header">
+        <h2>Complete Your Profile</h2>
+        <button 
+          className={`edit-btn ${isEditing ? 'save' : ''}`}
+          onClick={() => setIsEditing(!isEditing)}
+        >
+          {isEditing ? <FaSave /> : <FaEdit />}
+          {isEditing ? 'Save Profile' : 'Edit Profile'}
         </button>
       </div>
 
-      <div className="profile-grid">
-        <div className="card">
-          <h3>About</h3>
-          <p>{form.bio || 'Add a bio to tell employers about yourself.'}</p>
-        </div>
-
-        <div className="card">
-          <h3>Contact & Links</h3>
-          <div className="info-list">
-            {form.phone && <div className="info-item"><FaPhone /> {form.phone}</div>}
-            {form.linkedin && <div className="info-item"><FaEnvelope /> <a href={form.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></div>}
-            {form.github && <div className="info-item"><FaGithub /> <a href={form.github} target="_blank" rel="noopener noreferrer">GitHub</a></div>}
-            {form.portfolio && <div className="info-item"><FaGlobe /> <a href={form.portfolio} target="_blank" rel="noopener noreferrer">Portfolio</a></div>}
-            {form.website && <div className="info-item"><FaGlobe /> <a href={form.website} target="_blank" rel="noopener noreferrer">Website</a></div>}
-            {!form.phone && !form.linkedin && !form.github && !form.portfolio && !form.website && (
-              <div className="empty">Add your contact information and links</div>
-            )}
-          </div>
-        </div>
-
-        <div className="card">
-          <h3>Education</h3>
-          <div className="info-list">
-            {form.degree && <div className="info-item"><FaGraduationCap /> {form.degree}</div>}
-            {form.graduationYear && <div className="info-item"><FaCalendarAlt /> Graduating in {form.graduationYear}</div>}
-            {form.cgpa && <div className="info-item">CGPA: {form.cgpa}</div>}
-            {!form.degree && !form.graduationYear && !form.cgpa && (
-              <div className="empty">Add your educational details</div>
-            )}
-          </div>
-        </div>
-
-        <div className="card">
-          <h3>Resume</h3>
-          {form.resumeUrl ? (
-            <div className="resume-preview">
-              <FaFileUpload size={32} />
-              <a href={form.resumeUrl} target="_blank" rel="noopener noreferrer" className="resume-link">View Resume</a>
+      <div className="profile-form">
+        {/* Personal Information */}
+        <div className="form-section">
+          <h3><FaUser /> Personal Information</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Job Title</label>
+              <input
+                type="text"
+                name="jobTitle"
+                value={form.jobTitle}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="Enter your job title"
+              />
             </div>
-          ) : (
-            <div className="empty">Upload your resume</div>
-          )}
+            <div className="form-group">
+              <label>Location</label>
+              <input
+                type="text"
+                name="location"
+                value={form.location}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="City, State, Country"
+              />
+            </div>
+            <div className="form-group">
+              <label><FaPhone /> Phone</label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+            <div className="form-group">
+              <label><FaLinkedin /> LinkedIn</label>
+              <input
+                type="url"
+                name="linkedin"
+                value={form.linkedin}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="https://linkedin.com/in/yourprofile"
+              />
+            </div>
+            <div className="form-group">
+              <label><FaGithub /> GitHub</label>
+              <input
+                type="url"
+                name="github"
+                value={form.github}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="https://github.com/yourusername"
+              />
+            </div>
+            <div className="form-group">
+              <label><FaGlobe /> Portfolio</label>
+              <input
+                type="url"
+                name="portfolio"
+                value={form.portfolio}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="https://yourportfolio.com"
+              />
+            </div>
+          </div>
+          <div className="form-group full-width">
+            <label>Bio / About</label>
+            <textarea
+              name="bio"
+              value={form.bio}
+              onChange={handleChange}
+              disabled={!isEditing}
+              placeholder="Tell us about yourself, your interests, and career goals..."
+              rows="4"
+            />
+          </div>
         </div>
 
-        <div className="card">
-          <div className="card-header">
-            <h3>Languages</h3>
-            <button type="button" className="action-link" onClick={() => setShowLanguageModal(true)}>Add Language</button>
+        {/* Education */}
+        <div className="form-section">
+          <h3><FaGraduationCap /> Education</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Degree</label>
+              <input
+                type="text"
+                name="degree"
+                value={form.degree}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="e.g., Bachelor of Science in Computer Science"
+              />
+            </div>
+            <div className="form-group">
+              <label>Graduation Year</label>
+              <input
+                type="text"
+                name="graduationYear"
+                value={form.graduationYear}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="2024"
+              />
+            </div>
+            <div className="form-group">
+              <label>CGPA / Percentage</label>
+              <input
+                type="text"
+                name="cgpa"
+                value={form.cgpa}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="3.8"
+              />
+            </div>
+            <div className="form-group">
+              <label><FaFileUpload /> Resume URL</label>
+              <input
+                type="url"
+                name="resumeUrl"
+                value={form.resumeUrl}
+                onChange={handleChange}
+                disabled={!isEditing}
+                placeholder="https://drive.google.com/your-resume"
+              />
+            </div>
           </div>
+        </div>
+
+        {/* Languages */}
+        <div className="form-section">
+          <h3><FaLanguage /> Languages</h3>
           {languages.length === 0 ? (
-            <div className="empty">Add languages you speak</div>
+            <div className="empty-state">No languages added yet</div>
           ) : (
-            <div className="language-list">
+            <div className="form-grid">
               {languages.map((lang, idx) => (
-                <div key={idx} className="language-item">
-                  <div className="language-content">
-                    <FaLanguage /> {lang.name} - <span className="proficiency-text">{lang.proficiency}</span>
-                  </div>
-                  <div className="skill-actions">
-                    <button 
-                      className="icon-btn edit-icon" 
-                      onClick={() => handleEditLanguage(idx)}
-                      aria-label="Edit language"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button 
-                      className="icon-btn delete-icon" 
-                      onClick={() => handleDeleteLanguage(idx)}
-                      aria-label="Delete language"
-                    >
-                      <FaTrash />
-                    </button>
+                <div key={idx} className="form-group">
+                  <label>{lang.name}</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ flex: 1 }}>{lang.proficiency}</span>
+                    {isEditing && (
+                      <>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleEditLanguage(idx)}
+                        >
+                          <FaEdit />
+                        </button>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleDeleteLanguage(idx)}
+                        >
+                          <FaTrash />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           )}
+          {isEditing && (
+            <button 
+              type="button"
+              className="add-btn"
+              onClick={() => setShowLanguageModal(true)}
+            >
+              <FaPlus /> Add Language
+            </button>
+          )}
         </div>
 
-        <div className="card">
-          <div className="card-header">
-            <h3>Projects</h3>
-            <button type="button" className="action-link" onClick={() => setShowProjectModal(true)}>Add Project</button>
-          </div>
+        {/* Projects */}
+        <div className="form-section">
+          <h3><FaProjectDiagram /> Projects</h3>
           {projects.length === 0 ? (
-            <div className="empty">Add your projects to showcase your work</div>
+            <div className="empty-state">Add your projects to showcase your work</div>
           ) : (
             <div className="project-list">
               {projects.map((project, idx) => (
-                <div key={idx} className="project-item">
-                  <div className="project-header">
-                    <FaProjectDiagram />
-                    <h4>{project.title}</h4>
-                    <div className="skill-actions" style={{marginLeft: 'auto'}}>
-                      <button 
-                        className="icon-btn edit-icon" 
-                        onClick={() => handleEditProject(idx)}
-                        aria-label="Edit project"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button 
-                        className="icon-btn delete-icon" 
-                        onClick={() => handleDeleteProject(idx)}
-                        aria-label="Delete project"
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
+                <div key={idx} className="array-item">
+                  <div className="array-item-header">
+                    <span>{project.title}</span>
+                    {isEditing && (
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleEditProject(idx)}
+                        >
+                          <FaEdit />
+                        </button>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleDeleteProject(idx)}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <p>{project.description}</p>
                   {project.link && (
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">View Project →</a>
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontSize: '0.9rem' }}>
+                      View Project →
+                    </a>
                   )}
                 </div>
               ))}
             </div>
           )}
+          {isEditing && (
+            <button 
+              type="button"
+              className="add-btn"
+              onClick={() => setShowProjectModal(true)}
+            >
+              <FaPlus /> Add Project
+            </button>
+          )}
         </div>
 
-        <div className="card">
-          <div className="card-header">
-            <h3>Skills</h3>
-            <button type="button" className="action-link" onClick={() => setShowSkillModal(true)}>Add Skill</button>
-          </div>
+        {/* Skills */}
+        <div className="form-section">
+          <h3>Skills</h3>
           {skills.length === 0 ? (
-            <div className="empty">No skills added yet. Add your first skill to get started.</div>
+            <div className="empty-state">Add your skills to get started</div>
           ) : (
-            <div className="skill-list">
+            <div className="skill-grid">
               {skills.map((skill, idx) => (
-                <div key={idx} className="skill-card">
-                  <div className="skill-top">
-                    <div className="skill-info">
-                      <h4>{skill.name}</h4>
-                      <span className="pill">{skill.category}</span>
-                    </div>
-                    <div className="skill-actions">
-                      <button 
-                        className="icon-btn edit-icon" 
-                        onClick={() => handleEditSkill(idx)}
-                        aria-label="Edit skill"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button 
-                        className="icon-btn delete-icon" 
-                        onClick={() => handleDeleteSkill(idx)}
-                        aria-label="Delete skill"
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
+                <div key={idx} className="skill-card-item">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <h4 style={{ margin: 0 }}>{skill.name}</h4>
+                    {isEditing && (
+                      <div style={{ display: 'flex', gap: '0.25rem' }}>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleEditSkill(idx)}
+                        >
+                          <FaEdit />
+                        </button>
+                        <button 
+                          type="button"
+                          className="icon-btn" 
+                          onClick={() => handleDeleteSkill(idx)}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  <div className="skill-progress-row">
-                    <div className="progress-bar">
-                      <div style={{ width: `${skill.proficiency}%` }} />
-                    </div>
-                    <span className="percent">{skill.proficiency}%</span>
+                  <span style={{ fontSize: '0.85rem', color: '#666' }}>{skill.category}</span>
+                  <div style={{ marginTop: '0.5rem', height: '6px', background: '#e0e0e0', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${skill.proficiency}%`, background: 'var(--primary)' }}></div>
                   </div>
                 </div>
               ))}
             </div>
           )}
+          {isEditing && (
+            <button 
+              type="button"
+              className="add-btn"
+              onClick={() => setShowSkillModal(true)}
+            >
+              <FaPlus /> Add Skill
+            </button>
+          )}
         </div>
       </div>
 
-      {showModal && (
-        <div className="modal-backdrop" onClick={() => setShowModal(false)}>
+      {showSkillModal && (
+        <div className="modal-backdrop" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Edit Profile</h3>
-              <button className="close-btn" onClick={() => setShowModal(false)}>×</button>
+              <h3>{editingSkillIndex !== null ? 'Edit Skill' : 'Add New Skill'}</h3>
+              <button className="close-btn" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>×</button>
             </div>
-            <form className="modal-form" onSubmit={handleSave}>
+            <form className="modal-form" onSubmit={handleSkillSubmit}>
               <label>
-                Job Title / Role *
+                Skill Name
                 <input
-                  name="jobTitle"
-                  value={form.jobTitle}
-                  onChange={handleChange}
-                  placeholder="e.g. Full Stack Developer"
+                  name="name"
+                  value={skillForm.name}
+                  onChange={handleSkillChange}
+                  placeholder="e.g. React, Python, Communication"
                   required
                 />
               </label>
 
               <label>
-                Location *
-                <input
-                  name="location"
-                  value={form.location}
-                  onChange={handleChange}
-                  placeholder="e.g. Chennai, India"
-                  required
-                />
+                Category
+                <select name="category" value={skillForm.category} onChange={handleSkillChange}>
+                  <option>Technical</option>
+                  <option>Soft Skill</option>
+                  <option>Language</option>
+                  <option>Certification</option>
+                </select>
               </label>
 
               <label>
-                Phone Number *
+                Proficiency: {skillForm.proficiency}%
                 <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="e.g. +91 98765 43210"
-                  required
+                  type="range"
+                  name="proficiency"
+                  min="0"
+                  max="100"
+                  value={skillForm.proficiency}
+                  onChange={handleSkillChange}
                 />
-              </label>
-
-              <label>
-                Bio / About *
-                <textarea
-                  name="bio"
-                  value={form.bio}
-                  onChange={handleChange}
-                  placeholder="Tell us about yourself, your interests, and career goals..."
-                  rows={4}
-                  required
-                />
-              </label>
-
-              <h4 style={{marginTop: '16px', marginBottom: '8px', fontSize: '1rem', fontWeight: '600'}}>Education</h4>
-              
-              <label>
-                Degree / Program *
-                <input
-                  name="degree"
-                  value={form.degree}
-                  onChange={handleChange}
-                  placeholder="e.g. B.Tech in Computer Science"
-                  required
-                />
-              </label>
-
-              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px'}}>
-                <label>
-                  Graduation Year *
-                  <input
-                    name="graduationYear"
-                    value={form.graduationYear}
-                    onChange={handleChange}
-                    placeholder="e.g. 2026"
-                    required
-                  />
-                </label>
-
-                <label>
-                  CGPA / Percentage *
-                  <input
-                    name="cgpa"
-                    value={form.cgpa}
-                    onChange={handleChange}
-                    placeholder="e.g. 8.5"
-                    required
-                  />
-                </label>
-              </div>
-
-              <h4 style={{marginTop: '16px', marginBottom: '8px', fontSize: '1rem', fontWeight: '600'}}>Links & Profiles</h4>
-
-              <label>
-                LinkedIn URL *
-                <input
-                  name="linkedin"
-                  value={form.linkedin}
-                  onChange={handleChange}
-                  placeholder="https://linkedin.com/in/yourprofile"
-                  required
-                />
-              </label>
-
-              <label>
-                GitHub Profile *
-                <input
-                  name="github"
-                  value={form.github}
-                  onChange={handleChange}
-                  placeholder="https://github.com/yourusername"
-                  required
-                />
-              </label>
-
-              <label>
-                Portfolio Website *
-                <input
-                  name="portfolio"
-                  value={form.portfolio}
-                  onChange={handleChange}
-                  placeholder="https://yourportfolio.com"
-                  required
-                />
-              </label>
-
-              <label>
-                Other Website
-                <input
-                  name="website"
-                  value={form.website}
-                  onChange={handleChange}
-                  placeholder="https://yourwebsite.com"
-                />
-              </label>
-
-              <label>
-                Resume URL *
-                <input
-                  name="resumeUrl"
-                  value={form.resumeUrl}
-                  onChange={handleChange}
-                  placeholder="https://drive.google.com/your-resume-link"
-                  required
-                />
-                <small style={{fontSize: '0.85rem', color: '#6b7280', marginTop: '4px'}}>
-                  Upload your resume to Google Drive or Dropbox and paste the shareable link
-                </small>
               </label>
 
               <div className="modal-actions">
-                <button type="button" className="ghost" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="primary">Save Changes</button>
+                <button type="button" className="ghost" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>Cancel</button>
+                <button type="submit" className="primary">{editingSkillIndex !== null ? 'Update Skill' : 'Add Skill'}</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-        {showSkillModal && (
-          <div className="modal-backdrop" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>{editingSkillIndex !== null ? 'Edit Skill' : 'Add New Skill'}</h3>
-                <button className="close-btn" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>×</button>
-              </div>
-              <form className="modal-form" onSubmit={handleSkillSubmit}>
-                <label>
-                  Skill Name
-                  <input
-                    name="name"
-                    value={skillForm.name}
-                    onChange={handleSkillChange}
-                    placeholder="e.g. React, Python, Communication"
-                    required
-                  />
-                </label>
-
-                <label>
-                  Category
-                  <select name="category" value={skillForm.category} onChange={handleSkillChange}>
-                    <option>Technical</option>
-                    <option>Soft Skill</option>
-                    <option>Language</option>
-                    <option>Certification</option>
-                  </select>
-                </label>
-
-                <label>
-                  Proficiency: {skillForm.proficiency}%
-                  <input
-                    type="range"
-                    name="proficiency"
-                    min="0"
-                    max="100"
-                    value={skillForm.proficiency}
-                    onChange={handleSkillChange}
-                  />
-                </label>
-
-                <div className="modal-actions">
-                  <button type="button" className="ghost" onClick={() => { setShowSkillModal(false); setEditingSkillIndex(null); }}>Cancel</button>
-                  <button type="submit" className="primary">{editingSkillIndex !== null ? 'Update Skill' : 'Add Skill'}</button>
-                </div>
-              </form>
+      {showProjectModal && (
+        <div className="modal-backdrop" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{editingProjectIndex !== null ? 'Edit Project' : 'Add New Project'}</h3>
+              <button className="close-btn" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>×</button>
             </div>
+            <form className="modal-form" onSubmit={handleProjectSubmit}>
+              <label>
+                Project Title *
+                <input
+                  name="title"
+                  value={projectForm.title}
+                  onChange={handleProjectChange}
+                  placeholder="e.g. E-commerce Website"
+                  required
+                />
+              </label>
+
+              <label>
+                Description *
+                <textarea
+                  name="description"
+                  value={projectForm.description}
+                  onChange={handleProjectChange}
+                  placeholder="Describe your project, technologies used, and your role..."
+                  rows={4}
+                  required
+                />
+              </label>
+
+              <label>
+                Project Link
+                <input
+                  name="link"
+                  value={projectForm.link}
+                  onChange={handleProjectChange}
+                  placeholder="https://github.com/yourproject or live demo link"
+                />
+              </label>
+
+              <div className="modal-actions">
+                <button type="button" className="ghost" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>Cancel</button>
+                <button type="submit" className="primary">{editingProjectIndex !== null ? 'Update Project' : 'Add Project'}</button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
+      )}
 
-          {showProjectModal && (
-            <div className="modal-backdrop" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>
-              <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{editingProjectIndex !== null ? 'Edit Project' : 'Add New Project'}</h3>
-                  <button className="close-btn" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>×</button>
-                </div>
-                <form className="modal-form" onSubmit={handleProjectSubmit}>
-                  <label>
-                    Project Title *
-                    <input
-                      name="title"
-                      value={projectForm.title}
-                      onChange={handleProjectChange}
-                      placeholder="e.g. E-commerce Website"
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    Description *
-                    <textarea
-                      name="description"
-                      value={projectForm.description}
-                      onChange={handleProjectChange}
-                      placeholder="Describe your project, technologies used, and your role..."
-                      rows={4}
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    Project Link
-                    <input
-                      name="link"
-                      value={projectForm.link}
-                      onChange={handleProjectChange}
-                      placeholder="https://github.com/yourproject or live demo link"
-                    />
-                  </label>
-
-                  <div className="modal-actions">
-                    <button type="button" className="ghost" onClick={() => { setShowProjectModal(false); setEditingProjectIndex(null); }}>Cancel</button>
-                    <button type="submit" className="primary">{editingProjectIndex !== null ? 'Update Project' : 'Add Project'}</button>
-                  </div>
-                </form>
-              </div>
+      {showLanguageModal && (
+        <div className="modal-backdrop" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{editingLanguageIndex !== null ? 'Edit Language' : 'Add New Language'}</h3>
+              <button className="close-btn" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>×</button>
             </div>
-          )}
+            <form className="modal-form" onSubmit={handleLanguageSubmit}>
+              <label>
+                Language *
+                <input
+                  name="name"
+                  value={languageForm.name}
+                  onChange={handleLanguageChange}
+                  placeholder="e.g. English, Spanish, Tamil"
+                  required
+                />
+              </label>
 
-          {showLanguageModal && (
-            <div className="modal-backdrop" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>
-              <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{editingLanguageIndex !== null ? 'Edit Language' : 'Add New Language'}</h3>
-                  <button className="close-btn" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>×</button>
-                </div>
-                <form className="modal-form" onSubmit={handleLanguageSubmit}>
-                  <label>
-                    Language *
-                    <input
-                      name="name"
-                      value={languageForm.name}
-                      onChange={handleLanguageChange}
-                      placeholder="e.g. English, Spanish, Tamil"
-                      required
-                    />
-                  </label>
+              <label>
+                Proficiency *
+                <select name="proficiency" value={languageForm.proficiency} onChange={handleLanguageChange} required>
+                  <option>Native</option>
+                  <option>Fluent</option>
+                  <option>Advanced</option>
+                  <option>Intermediate</option>
+                  <option>Basic</option>
+                </select>
+              </label>
 
-                  <label>
-                    Proficiency *
-                    <select name="proficiency" value={languageForm.proficiency} onChange={handleLanguageChange} required>
-                      <option>Native</option>
-                      <option>Fluent</option>
-                      <option>Advanced</option>
-                      <option>Intermediate</option>
-                      <option>Basic</option>
-                    </select>
-                  </label>
-
-                  <div className="modal-actions">
-                    <button type="button" className="ghost" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>Cancel</button>
-                    <button type="submit" className="primary">{editingLanguageIndex !== null ? 'Update Language' : 'Add Language'}</button>
-                  </div>
-                </form>
+              <div className="modal-actions">
+                <button type="button" className="ghost" onClick={() => { setShowLanguageModal(false); setEditingLanguageIndex(null); }}>Cancel</button>
+                <button type="submit" className="primary">{editingLanguageIndex !== null ? 'Update Language' : 'Add Language'}</button>
               </div>
-            </div>
-          )}
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

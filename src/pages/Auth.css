@@ -2,6 +2,8 @@
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+  background: var(--bg);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .auth-background {
@@ -10,15 +12,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
   z-index: 0;
 }
 
 .gradient-circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  animation: float 20s infinite;
+  background: radial-gradient(circle, rgba(255, 111, 97, 0.08) 0%, rgba(255, 111, 97, 0.02) 70%, transparent 100%);
+  animation: float 25s infinite ease-in-out;
 }
 
 .circle-1 {
@@ -47,10 +49,13 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0) scale(1) rotate(0deg);
   }
-  50% {
-    transform: translate(30px, -30px) scale(1.1);
+  33% {
+    transform: translate(30px, -30px) scale(1.05) rotate(120deg);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(1.1) rotate(240deg);
   }
 }
 
@@ -62,7 +67,8 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  gap: 4rem;
+  gap: 6rem;
+  animation: fadeInUp 0.7s ease-out;
 }
 
 .auth-content.centered {
@@ -71,29 +77,33 @@
 
 .auth-left {
   flex: 1;
-  color: white;
+  color: var(--text);
   max-width: 500px;
+  animation: fadeInLeft 0.8s ease-out;
 }
 
 .auth-left h1 {
   font-size: 3rem;
   margin: 0;
   font-weight: 300;
+  color: var(--text-light);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .auth-left h2 {
   font-size: 4rem;
   margin: 0;
   font-weight: 800;
-  background: linear-gradient(to right, #fff, #f0f0f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--primary);
+  animation: fadeInUp 0.8s ease-out 0.3s both;
 }
 
 .auth-left p {
   font-size: 1.3rem;
   margin: 1rem 0 2rem 0;
   opacity: 0.95;
+  color: var(--text-light);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
 .features-list {
@@ -108,17 +118,20 @@
   align-items: center;
   gap: 1rem;
   font-size: 1.1rem;
+  color: var(--text);
 }
 
 .feature-icon {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  color: white;
+  flex-shrink: 0;
 }
 
 .stats-container {
@@ -131,21 +144,23 @@
   flex: 1;
   text-align: center;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--card);
   border-radius: 15px;
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .stat-box h3 {
   font-size: 2.5rem;
   margin: 0;
   font-weight: 800;
+  color: var(--primary);
 }
 
 .stat-box p {
   margin: 0.5rem 0 0 0;
   font-size: 0.95rem;
-  opacity: 0.9;
+  color: var(--text-light);
 }
 
 .auth-right {
@@ -155,11 +170,12 @@
 }
 
 .auth-card {
-  background: white;
-  border-radius: 25px;
+  background: var(--card);
+  border-radius: 16px;
   padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   animation: slideIn 0.5s ease;
+  border: 1px solid var(--border);
 }
 
 @keyframes slideIn {
@@ -179,13 +195,14 @@
 }
 
 .auth-header h2 {
-  color: #333;
+  color: var(--text);
   margin: 0 0 0.5rem 0;
   font-size: 2rem;
+  font-weight: 700;
 }
 
 .auth-header p {
-  color: #666;
+  color: var(--text-light);
   margin: 0;
   font-size: 0.95rem;
 }
@@ -200,27 +217,93 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .form-group label {
   font-weight: 600;
-  color: #333;
+  color: var(--text);
   font-size: 0.95rem;
+  animation: fadeInLeft 0.5s ease-out;
 }
 
 .form-select {
   padding: 0.9rem 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s;
-  background: white;
+  background: var(--card);
+  color: var(--text);
 }
 
 .form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 111, 97, 0.1);
+}
+
+.role-selector {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.role-card {
+  flex: 1;
+  min-width: 220px;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.role-card:hover {
+  border-color: var(--role-accent, var(--primary));
+  box-shadow: 0 6px 18px rgba(255, 111, 97, 0.1);
+  transform: translateY(-4px);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.role-card.active {
+  border-color: var(--role-accent, var(--primary));
+  box-shadow: 0 10px 25px rgba(255, 111, 97, 0.18);
+  background: linear-gradient(135deg, rgba(255, 111, 97, 0.04), rgba(255, 111, 97, 0.02));
+  animation: pulse 0.6s ease-out;
+}
+
+.role-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 0.2rem;
+  background: var(--role-accent, var(--primary));
+  flex-shrink: 0;
+}
+
+.role-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.role-label {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.role-desc {
+  font-size: 0.9rem;
+  color: var(--text-light);
 }
 
 .input-group {
@@ -232,23 +315,31 @@
 .input-icon {
   position: absolute;
   left: 1rem;
-  color: #999;
+  color: var(--text-light);
   font-size: 1.1rem;
 }
 
 .input-group input {
   width: 100%;
   padding: 0.9rem 1rem 0.9rem 3rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s;
+  background: var(--card);
+  color: var(--text);
+}
+
+.input-group input::placeholder {
+  color: var(--text-light);
 }
 
 .input-group input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 111, 97, 0.1);
+  animation: glowPulse 0.5s ease-out;
+  background: var(--card);
 }
 
 .toggle-password {
@@ -256,14 +347,15 @@
   right: 1rem;
   background: none;
   border: none;
-  color: #999;
+  color: var(--text-light);
   cursor: pointer;
   font-size: 1.1rem;
   transition: color 0.3s;
 }
 
 .toggle-password:hover {
-  color: #667eea;
+  color: var(--primary);
+  animation: rotate 0.3s ease-out;
 }
 
 .form-options {
@@ -278,15 +370,16 @@
   gap: 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-light);
 }
 
 .checkbox-label input {
   cursor: pointer;
+  accent-color: var(--primary);
 }
 
 .forgot-link {
-  color: #667eea;
+  color: var(--primary);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
@@ -294,46 +387,60 @@
 }
 
 .forgot-link:hover {
-  color: #764ba2;
+  color: var(--primary-dark);
 }
 
 .auth-button {
   padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   margin-top: 0.5rem;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .auth-button:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  animation: pulse 0.5s ease-out;
+}
+
+.auth-button:active {
+  transform: translateY(0);
+  animation: none;
+}
+
+.auth-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .auth-footer {
   text-align: center;
   margin-top: 1rem;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
 }
 
 .auth-footer p {
-  color: #666;
+  color: var(--text-light);
   font-size: 0.95rem;
 }
 
 .auth-footer a {
-  color: #667eea;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
 }
 
 .auth-footer a:hover {
-  color: #764ba2;
+  color: var(--primary-dark);
 }
 
 .success-card {
@@ -343,7 +450,7 @@
 
 .success-icon {
   font-size: 5rem;
-  color: #10b981;
+  color: var(--success);
   margin-bottom: 1.5rem;
   animation: scaleIn 0.5s ease;
 }
@@ -358,17 +465,17 @@
 }
 
 .success-card h2 {
-  color: #333;
+  color: var(--text);
   margin-bottom: 1rem;
 }
 
 .success-card p {
-  color: #666;
+  color: var(--text-light);
   margin-bottom: 0.5rem;
 }
 
 .email-highlight {
-  color: #667eea;
+  color: var(--primary);
   font-weight: 600;
   font-size: 1.1rem;
   margin: 1rem 0;
@@ -378,12 +485,13 @@
   font-size: 0.9rem;
   line-height: 1.6;
   margin: 1.5rem 0 2rem 0;
+  color: var(--text-light);
 }
 
 .resend-link {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--primary);
   cursor: pointer;
   font-weight: 600;
   margin-top: 1rem;
@@ -391,7 +499,7 @@
 }
 
 .resend-link:hover {
-  color: #764ba2;
+  color: var(--primary-dark);
 }
 
 @media (max-width: 968px) {
@@ -420,3 +528,4 @@
     padding: 2rem;
   }
 }
+

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaSignOutAlt, FaCog, FaChartBar, FaMicrophone, FaBook, FaUpload, FaBuilding } from 'react-icons/fa';
 import { getProfile } from '../api';
+import logo from '../assests/logo.png';
 import './Navbar.css';
 
 const Navbar = ({ userRole }) => {
@@ -35,7 +36,7 @@ const Navbar = ({ userRole }) => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <div className="logo-icon">🚀</div>
+          <img src={logo} alt="logo" className="logo-icon" />
           <span>Placement Portal</span>
         </Link>
         

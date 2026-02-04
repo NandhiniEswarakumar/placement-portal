@@ -4,6 +4,7 @@ import './App.css';
 
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
+import LoadingScreen from './components/LoadingScreen';
 
 import Home from './pages/Home';
 import Jobs from './pages/Jobs';
@@ -20,12 +21,18 @@ import ResetPassword from './pages/ResetPassword';
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const [userRole, setUserRole] = useState('student');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
       setUserRole(storedRole);
     }
+    // Simulate initial loading (remove this if you have actual data fetching)
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -34,27 +41,30 @@ function App() {
   }, [theme]);
 
   return (
-    <Router>
-      <div className="app-shell">
-        <Navbar userRole={userRole} />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/student-dashboard" element={<StudentDashboard />} />
-            <Route path="/hr-dashboard" element={<HRDashboard />} />
-            <Route path="/placement-dashboard" element={<PlacementDashboard />} />
-            <Route path="/placement-portal" element={<PlacementPortal />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings theme={theme} setTheme={setTheme} />} />
-            <Route path="/login" element={<Login setUserRole={setUserRole} />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-          </Routes>
-        </main>
-        <Chatbot />
-      </div>
-    </Router>
+    <>
+      {isLoading && <LoadingScreen />}
+      <Router>
+        <div className="app-shell">
+          <Navbar userRole={userRole} />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/jobs" element={<Jobs />} />
+              <Route path="/student-dashboard" element={<StudentDashboard />} />
+              <Route path="/hr-dashboard" element={<HRDashboard />} />
+              <Route path="/placement-dashboard" element={<PlacementDashboard />} />
+              <Route path="/placement-portal" element={<PlacementPortal />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings theme={theme} setTheme={setTheme} />} />
+              <Route path="/login" element={<Login setUserRole={setUserRole} />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+            </Routes>
+          </main>
+          <Chatbot />
+        </div>
+      </Router>
+    </>
   );
 }
 
